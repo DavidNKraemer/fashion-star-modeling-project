@@ -5,5 +5,8 @@
 * David Kraemer
 * William Rebelsky
 
-test
-https://www.overleaf.com/5090753cpwtjv
+## Overleaf links
+* [Notes][notes]
+
+[notes]: https://www.overleaf.com/5090753cpwtjv
+
