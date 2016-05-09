@@ -21,14 +21,12 @@
 % C:   Cotton
 
 % Sunk costs
-%velvet_cost = 500000;
-velvet_cost = 0;
-sunkcosts = 860000 + 3 * 1200000 - velvet_cost;
+sunkcosts = 860000 + 3 * 1200000;
 
 % Revenue weights
-%                   TWS CAS  SB  SC  TS  WB  VP CS  CM  VS  BB
-revenue_weights  = [300 450 180 120 270 320   0 130 75   0 120];
-labor_weights    = [160 150  80  60 120 140 175 60  40 160  90];
+%                   TWS CAS  SB  SC  TS  WB  VP  CS CM  VS  BB
+revenue_weights  = [300 450 180 120 270 320 350 130 75 200 120];
+labor_weights    = [160 150 100  60 120 140 175  60 40 160  90];
 material_weights = [9 * 3 + 1.5 * 2      ... % TWS
                     60 * 1.5             ... % CAS
                     13 * 1.5             ... %  SB
@@ -43,7 +41,7 @@ material_weights = [9 * 3 + 1.5 * 2      ... % TWS
 
 net_profit_weights = revenue_weights - labor_weights - material_weights;
 
-%  TWS, CAS,  SB,  SC,  TS,  WB,  VP,  CS,  CM,  VS,  BB;
+%   TWS, CAS,  SB,  SC,  TS,  WB,  VP,  CS,  CM,  VS,  BB;
 
 A = [ 0,   0,   0,   0,   0,   0,   1,   0,   0,   0,   0; %5500  VP
       0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   0; %6000  VS
@@ -75,12 +73,12 @@ upper_bounds = [];
 
 bundle  = linprog(-net_profit_weights, A, constraints, ...
                   [], [], lower_bounds, upper_bounds, []);
-              
-bundle = floor(bundle);
 
+bundle = floor(bundle);
+              
 result = [constraints; (A * bundle).'];
 
-assert(all(result(1,:) >= result(2,:)))
+assert(all(result(1,:) - result(2,:) > -1e-5))
 
 profit = dot(net_profit_weights, bundle) - sunkcosts;
 
