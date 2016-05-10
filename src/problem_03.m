@@ -21,7 +21,7 @@
 % C:   Cotton
 
 % Sunk costs
-sunkcosts = 860000 + 3 * 1200000-12*20000;
+sunkcosts = 860000 + 3 * 1200000 + 12*20000;
 
 % Revenue weights
 %                   TWS CAS  SB  SC  TS  WB  VP  CS CM  VS  BB
