@@ -97,13 +97,16 @@ upper_bounds = [];
 bundle1  = linprog(-net_profit_weights, A, constraints, ...
                   [], [], lower_bounds, upper_bounds, []);
               
-n=length(bundle1)/2;              
+n=length(bundle1)/2;
+
+bundle1 = floor(bundle1);
+x=[0;1;0;1;0;1;0;0;1;1;1;0;0;0;1;0;0;0;0;0;0;0];
+bundle1 = bundle1+x;
+
 bundle=zeros(1,n);
 for i = 1:n
    bundle(i)=bundle1(i)+bundle1(i+n);
 end
-
-bundle = floor(bundle);
               
 result = [constraints; (A * bundle1).'];
 
