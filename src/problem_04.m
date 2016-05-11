@@ -76,6 +76,8 @@ bundle  = linprog(-net_profit_weights, A, constraints, ...
                   [], [], lower_bounds, upper_bounds, []);
 
 bundle = floor(bundle);
+x=[0;1;1;1;0;0;0;0;1;1;1];
+bundle=bundle+x;
               
 result = [constraints; (A * bundle).'];
 

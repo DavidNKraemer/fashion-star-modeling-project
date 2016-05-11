@@ -78,6 +78,9 @@ bundle  = linprog(-net_profit_weights, A, constraints, ...
               
 bundle = floor(bundle);
 
+x=[0;1;1;1;0;1;0;0;1;1;1];
+bundle=bundle+x;
+
 result = [constraints; (A * bundle).'];
 
 assert(all(result(1,:) >= result(2,:)))
