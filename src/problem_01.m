@@ -1,4 +1,14 @@
-% Legend:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The first Velvet question, should they be produced? %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% David Kraemer and William Rebelsky %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%
+% Legend: %
+%%%%%%%%%%%
+
 % TWS: Tailored Wool Slacks
 % CAS: Cashmere Sweater
 % SB:  Silk Blouse
@@ -21,11 +31,13 @@
 % C:   Cotton
 
 % Sunk costs
-%velvet_cost = 500000;
+% comment one of the two velvet costs depending on whether or not the
+% $500000 has already been spent
+% velvet_cost = 500000;
 velvet_cost = 0;
 sunkcosts = 860000 + 3 * 1200000 - velvet_cost;
 
-% Revenue weights
+% Associated revenue and costs per item.
 %                   TWS CAS  SB  SC  TS  WB  VP CS  CM  VS  BB
 revenue_weights  = [300 450 180 120 270 320   0 130 75   0 120];
 labor_weights    = [160 150  80  60 120 140 175 60  40 160  90];
@@ -43,8 +55,11 @@ material_weights = [9 * 3 + 1.5 * 2      ... % TWS
 
 net_profit_weights = revenue_weights - labor_weights - material_weights;
 
-%  TWS, CAS,  SB,  SC,  TS,  WB,  VP,  CS,  CM,  VS,  BB;
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Matrix of Coefficients %
+%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%  TWS, CAS,  SB,  SC,  TS,  WB,  VP,  CS,  CM,  VS,  BB;
 A = [ 0,   0,   0,   0,   0,   0,   1,   0,   0,   0,   0; %5500  VP
       0,   0,   0,   0,   0,   0,   0,   0,   0,   1,   0; %6000  VS
       0,   1,   0,   0,   0,   0,   0,   0,   0,   0,   0; %4000  CAS
@@ -65,30 +80,40 @@ A = [ 0,   0,   0,   0,   0,   0,   1,   0,   0,   0,   0; %5500  VP
       0,   0,   1,  -1,   0,   0,   0,   0,   0,   0,   0; %0     scrap
       0,   0,   0,   0,   0,   0,   0,   1,  -1,   0,   0; %0     scrap
  ];
-   
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Vector of Constraints %
+%%%%%%%%%%%%%%%%%%%%%%%%%
 constraints = [5500, 6000,  4000, 12000, 15000, -2800, -3000,  5000, -4200, ...
                7000, 45000, 28000,  9000, 18000, 30000, 20000, 30000, 0, 0];
 
+% lower bounds are 0, upper bounds are defined in the constraints.          
 lower_bounds = zeros(1,length(net_profit_weights));
-%upper_bounds = 100000 * ones(1, length(net_profit_weights));
 upper_bounds = [];
 
+% The solution
 bundle  = linprog(-net_profit_weights, A, constraints, ...
                   [], [], lower_bounds, upper_bounds, []);
               
+% The solution is not an integer, so we floor it to ensure that the
+% constraints are met
 bundle = floor(bundle);
 
+% We add this vector since it is still in the solution space
 x=[0;1;1;1;0;1;0;0;1;1;1];
 bundle=bundle+x;
 
+% We check to make sure that all the constraints hold
 result = [constraints; (A * bundle).'];
 
 assert(all(result(1,:) >= result(2,:)))
 
+% If they do we calculate the net profit
 profit = dot(net_profit_weights, bundle) - sunkcosts;
 
 bundle_label = {'TWS'; 'CAS'; 'SB';  'SC';  'TS';  'WB';  'VP';  'CS';  'CM';  'VS';  'BB'};
 
+% Return the production line and the net Profit
 for i = 1:length(bundle_label)
    fprintf('%s:\t%.0f\n', bundle_label{i}, bundle(i)); 
 end
