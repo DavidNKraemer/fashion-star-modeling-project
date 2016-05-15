@@ -90,9 +90,11 @@ lower_bounds = zeros(1,length(net_profit_weights));
 upper_bounds = [];
 
 % The solution
-bundle  = linprog(-net_profit_weights, A, constraints, ...
+[bundle,fval,exitflag,output,lambda]=linprog(-net_profit_weights, A, constraints, ...
                   [], [], lower_bounds, upper_bounds, []);
-              
+
+shadow=lambda.ineqlin;
+             
 % The solution is not an integer, so we floor it to ensure that the
 % constraints are met
 bundle = floor(bundle);
@@ -111,8 +113,25 @@ profit = dot(net_profit_weights, bundle) - sunkcosts;
 
 bundle_label = {'TWS'; 'CAS'; 'SB';  'SC';  'TS';  'WB';  'VP';  'CS';  'CM';  'VS';  'BB'};
 
+shadow_label = {'VP max'; 'VS max'; 'CAS max';  'SB max';  'SC max';...
+                'TS min'; 'WB min'; 'WB max'; 'TWS min'; 'TWS max'; ...
+                'wool'; 'acetate'; 'cashmere'; 'silk'; 'rayon'; 'velvet';...
+                'cotton'; 'silk scrap'; 'cotton scrap'};
+
+
 % Return the production line and the net profit
+fprintf('Optimal production bundle.\n');
 for i = 1:length(bundle_label)
    fprintf('%s:\t%.0f\n', bundle_label{i}, bundle(i)); 
 end
+
+% Return the shadow prices
+fprintf('Shadow prices.\n');
+for i = 1:length(shadow_label)
+   fprintf('%s:\t\t%.0f\n', shadow_label{i}, shadow(i)); 
+end
+
 fprintf('Profit:\t$%.2f\n',profit);
+
+
+

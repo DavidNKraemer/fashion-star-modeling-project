@@ -9,14 +9,15 @@
 
 The `src` directory contains all of the code used in producing this project.
 This includes a `main.m` file, which solves the basic problem that is described
-by the data in this file. We also have the following files:
+by the data in this file (including the shadow prices). We also have the
+following files:
 
 | File name | Description |
 |:----------|:------------|
 | `problem_01.m` | Running this file gives the results for when we don't produce
 velvet shirts | 
-| `problem_02.m` | This is essentially the same as `main.m`, due to how the
-prompt was written |
+| `problem_02.m` | This is essentially the same as `main.m` without shadow
+prices, due to how the prompt was written |
 | `problem_03.m` | Scenario in which velvet can't be returned |
 | `problem_04.m` | Scenario in which blazer costs are underestimated by $80 |
 | `problem_05.m` | Scenario in which acetate supply increases by 10,000 |
@@ -26,7 +27,7 @@ prompt was written |
 In MATLAB, the usage for any of these files is 
 
 ```Matlab
-> problem_0#.m
+> problem_0#
 ```
 
 which will print out the desired results. *Note*: The output is in short hand
