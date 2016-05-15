@@ -5,10 +5,32 @@
 * David Kraemer
 * William Rebelsky
 
-## Overleaf links
-* [Notes][notes]
+# How to use this repository
 
-[notes]: https://www.overleaf.com/5090753cpwtjv
+The `src` directory contains all of the code used in producing this project.
+This includes a `main.m` file, which solves the basic problem that is described
+by the data in this file. We also have the following files:
+
+| File name | Description |
+|:----------|:------------|
+| `problem_01.m` | Running this file gives the results for when we don't produce
+velvet shirts | 
+| `problem_02.m` | This is essentially the same as `main.m`, due to how the
+prompt was written |
+| `problem_03.m` | Scenario in which velvet can't be returned |
+| `problem_04.m` | Scenario in which blazer costs are underestimated by $80 |
+| `problem_05.m` | Scenario in which acetate supply increases by 10,000 |
+| `problem_06a.m` | Scenario in which outlet stores sell at 60% profit |  
+| `problem_06b.m` | Scenario in which outlet stores sell at 60% revenue |  
+
+In MATLAB, the usage for any of these files is 
+
+```Matlab
+> problem_0#.m
+```
+
+which will print out the desired results. *Note*: The output is in short hand
+variable names which are slightly annoying to read.
 
 
 # Data
