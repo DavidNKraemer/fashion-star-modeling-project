@@ -101,6 +101,9 @@ constraints = [5500, 6000,  4000, 12000, 15000, -2800, -3000,  5000, -4200, ...
 
 % This is the same format as the primal problem, but ths allows us to find
 %the shadow values through lambda.
+% lower bounds are 0, upper bounds are defined in the constraints.          
+lower_bounds = zeros(1,length(net_profit_weights));
+upper_bounds = [];
 [bundle,fval,exitflag,output,lambda]=linprog(-net_profit_weights, A, constraints, ...
                   [], [], lower_bounds, upper_bounds, []);
 
@@ -110,16 +113,7 @@ shadow_label = {'VP max'; 'VS max'; 'CAS max';  'SB max';  'SC max';...
                 'wool'; 'acetate'; 'cashmere'; 'silk'; 'rayon'; 'velvet';...
                 'cotton'; 'silk scrap'; 'cotton scrap'};
 
-% Return the production line and the net profit
+% Return the shadow prices
 for i = 1:length(shadow_label)
    fprintf('%s:\t%.0f\n', shadow_label{i}, shadow(i)); 
 end
-
-fprintf('\n\n\n'); 
-bundle_label = {'TWS'; 'CAS'; 'SB';  'SC';  'TS';  'WB';  'VP';  'CS';  'CM';  'VS';  'BB'};
-
-% Return the production line and the net profit
-for i = 1:length(bundle_label)
-   fprintf('%s:\t%.0f\n', bundle_label{i}, bundle(i)); 
-end
-fprintf('Profit:\t$%.2f\n',profit);
